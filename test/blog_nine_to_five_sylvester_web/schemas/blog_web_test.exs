@@ -3,7 +3,7 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
 
   import BlogNineToFiveSylvester.BlogFixtures
 
-  # TODO tests to make: create post, create comment, list all posts (with comments), list single post (with comments)
+  # TODO create tests for faulty posts and comments
 
   describe "posts" do
     test "list all posts", %{conn: conn} do
