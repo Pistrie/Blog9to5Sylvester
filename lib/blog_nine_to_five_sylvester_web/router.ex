@@ -5,8 +5,13 @@ defmodule BlogNineToFiveSylvesterWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BlogNineToFiveSylvesterWeb do
+  scope "/api" do
     pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: BlogNineToFiveSylvesterWeb.Schema,
+      interface: :simple,
+      context: %{pubsub: BlogNineToFiveSylvesterWeb.Endpoint}
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
