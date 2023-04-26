@@ -16,8 +16,8 @@ defmodule BlogNineToFiveSylvesterWeb.Resolvers.Blog do
     end
   end
 
-  def all_comments(_root, _args, _info) do
-    {:ok, Blog.list_comments()}
+  def load_comments(root, _args, _info) do
+    {:ok, Blog.list_comments_by_post(root)}
   end
 
   def add_comment_to_post(_root, args, _info) do

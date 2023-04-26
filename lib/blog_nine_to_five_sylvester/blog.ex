@@ -117,6 +117,10 @@ defmodule BlogNineToFiveSylvester.Blog do
     Repo.all(Comment)
   end
 
+  def list_comments_by_post(%Post{} = post) do
+    Comment |> where(post_id: ^post.id) |> Repo.all()
+  end
+
   @doc """
   Gets a single comment.
 
