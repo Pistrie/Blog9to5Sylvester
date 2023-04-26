@@ -14,6 +14,9 @@ alias BlogNineToFiveSylvester.Blog.Post
 alias BlogNineToFiveSylvester.Blog.Comment
 alias BlogNineToFiveSylvester.Repo
 
+Repo.delete_all(Comment)
+Repo.delete_all(Post)
+
 {:ok, _post} =
   %Post{
     author: "José Valim",
