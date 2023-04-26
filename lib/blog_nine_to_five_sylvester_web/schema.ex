@@ -5,21 +5,20 @@ defmodule BlogNineToFiveSylvesterWeb.Schema do
 
   object :post do
     field :id, non_null(:id)
-    field :author, :string
-    field :text, :string
-    field :title, :string
+    field :author, non_null(:string)
+    field :text, non_null(:string)
+    field :title, non_null(:string)
 
     field :comments, list_of(:comment) do
-      arg(:author, :string)
-      arg(:text, :string)
-      resolve(&Resolvers.Blog.all_comments/3)
+      arg(:id, :string)
+      resolve(&Resolvers.Blog.load_comments/3)
     end
   end
 
   object :comment do
     field :id, non_null(:id)
-    field :author, :string
-    field :text, :string
+    field :author, non_null(:string)
+    field :text, non_null(:string)
     field :post_id, non_null(:integer)
   end
 
