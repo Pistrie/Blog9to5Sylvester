@@ -17,5 +17,6 @@ defmodule BlogNineToFiveSylvester.Blog.Comment do
     comment
     |> cast(attrs, [:text, :author, :post_id])
     |> validate_required([:text, :author, :post_id])
+    |> validate_length(:author, min: 2)
   end
 end

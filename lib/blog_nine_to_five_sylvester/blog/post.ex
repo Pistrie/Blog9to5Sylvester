@@ -19,5 +19,7 @@ defmodule BlogNineToFiveSylvester.Blog.Post do
     post
     |> cast(attrs, [:title, :text, :author])
     |> validate_required([:title, :text, :author])
+    |> validate_length(:author, min: 2)
+    |> validate_length(:title, min: 2)
   end
 end
