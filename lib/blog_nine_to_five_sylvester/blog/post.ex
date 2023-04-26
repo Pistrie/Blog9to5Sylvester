@@ -2,12 +2,16 @@ defmodule BlogNineToFiveSylvester.Blog.Post do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias BlogNineToFiveSylvester.Blog.Comment
+
   schema "posts" do
     field :author, :string
     field :text, :string
     field :title, :string
 
     timestamps()
+
+    has_many :comments, Comment
   end
 
   @doc false

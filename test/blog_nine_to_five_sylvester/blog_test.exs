@@ -8,7 +8,7 @@ defmodule BlogNineToFiveSylvester.BlogTest do
 
     import BlogNineToFiveSylvester.BlogFixtures
 
-    @invalid_attrs %{author: nil, text: nil, title: nil}
+    @invalid_attrs %{post_id: nil, author: nil, text: nil, title: nil}
 
     test "list_posts/0 returns all posts" do
       post = post_fixture()
@@ -35,7 +35,12 @@ defmodule BlogNineToFiveSylvester.BlogTest do
 
     test "update_post/2 with valid data updates the post" do
       post = post_fixture()
-      update_attrs = %{author: "some updated author", text: "some updated text", title: "some updated title"}
+
+      update_attrs = %{
+        author: "some updated author",
+        text: "some updated text",
+        title: "some updated title"
+      }
 
       assert {:ok, %Post{} = post} = Blog.update_post(post, update_attrs)
       assert post.author == "some updated author"
@@ -79,7 +84,7 @@ defmodule BlogNineToFiveSylvester.BlogTest do
     end
 
     test "create_comment/1 with valid data creates a comment" do
-      valid_attrs = %{author: "some author", text: "some text"}
+      valid_attrs = %{post_id: post_fixture().id, author: "some author", text: "some text"}
 
       assert {:ok, %Comment{} = comment} = Blog.create_comment(valid_attrs)
       assert comment.author == "some author"

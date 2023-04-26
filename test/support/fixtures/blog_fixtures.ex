@@ -27,6 +27,7 @@ defmodule BlogNineToFiveSylvester.BlogFixtures do
     {:ok, comment} =
       attrs
       |> Enum.into(%{
+        post_id: post_fixture().id,
         author: "some author",
         text: "some text"
       })
