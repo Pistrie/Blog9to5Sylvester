@@ -23,11 +23,11 @@ defmodule BlogNineToFiveSylvester.BlogFixtures do
   @doc """
   Generate a comment.
   """
-  def comment_fixture(attrs \\ %{}) do
+  def comment_fixture(post_id, attrs \\ %{}) do
     {:ok, comment} =
       attrs
       |> Enum.into(%{
-        post_id: post_fixture().id,
+        post_id: post_id,
         author: "some author",
         text: "some text"
       })

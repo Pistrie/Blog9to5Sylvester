@@ -74,12 +74,14 @@ defmodule BlogNineToFiveSylvester.BlogTest do
     @invalid_attrs %{author: nil, text: nil}
 
     test "list_comments/0 returns all comments" do
-      comment = comment_fixture()
+      post = post_fixture()
+      comment = comment_fixture(post.id)
       assert Blog.list_comments() == [comment]
     end
 
     test "get_comment!/1 returns the comment with given id" do
-      comment = comment_fixture()
+      post = post_fixture()
+      comment = comment_fixture(post.id)
       assert Blog.get_comment!(comment.id) == comment
     end
 
@@ -96,7 +98,8 @@ defmodule BlogNineToFiveSylvester.BlogTest do
     end
 
     test "update_comment/2 with valid data updates the comment" do
-      comment = comment_fixture()
+      post = post_fixture()
+      comment = comment_fixture(post.id)
       update_attrs = %{author: "some updated author", text: "some updated text"}
 
       assert {:ok, %Comment{} = comment} = Blog.update_comment(comment, update_attrs)
@@ -105,19 +108,22 @@ defmodule BlogNineToFiveSylvester.BlogTest do
     end
 
     test "update_comment/2 with invalid data returns error changeset" do
-      comment = comment_fixture()
+      post = post_fixture()
+      comment = comment_fixture(post.id)
       assert {:error, %Ecto.Changeset{}} = Blog.update_comment(comment, @invalid_attrs)
       assert comment == Blog.get_comment!(comment.id)
     end
 
     test "delete_comment/1 deletes the comment" do
-      comment = comment_fixture()
+      post = post_fixture()
+      comment = comment_fixture(post.id)
       assert {:ok, %Comment{}} = Blog.delete_comment(comment)
       assert_raise Ecto.NoResultsError, fn -> Blog.get_comment!(comment.id) end
     end
 
     test "change_comment/1 returns a comment changeset" do
-      comment = comment_fixture()
+      post = post_fixture()
+      comment = comment_fixture(post.id)
       assert %Ecto.Changeset{} = Blog.change_comment(comment)
     end
   end
