@@ -4,6 +4,9 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
   import BlogNineToFiveSylvester.BlogFixtures
 
   describe "posts" do
+    #
+    # TEST LIST ALL POSTS
+    #
     test "list all posts", %{conn: conn} do
       user_query = """
       query {
@@ -46,6 +49,9 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
              }
     end
 
+    #
+    # TEST GET SINGLE POST
+    #
     test "get single post", %{conn: conn} do
       user_query = """
       query GetPostById($id: ID!) {
@@ -87,6 +93,9 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
              }
     end
 
+    #
+    # TEST CREATE POST
+    #
     test "create post", %{conn: conn} do
       user_query = """
       mutation CreatePost($author: String!, $title: String!, $text: String!) {
@@ -125,6 +134,9 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
              }
     end
 
+    #
+    # TEST CREATE POST WITH INVALID DATA
+    #
     test "create post with invalid data should return error", %{conn: conn} do
       user_query = """
       mutation CreatePost($author: String!, $title: String!, $text: String!) {
@@ -169,6 +181,9 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
   end
 
   describe "comments" do
+    #
+    # TEST ADD COMMENT TO POST
+    #
     test "add comment to post", %{conn: conn} do
       user_query = """
       mutation CreateComment($postId: Int!, $author: String!, $text: String!) {
@@ -209,6 +224,9 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
              }
     end
 
+    #
+    # TEST ADD COMMENT WITH INVALID DATA
+    #
     test "add comment with invalid data should return error", %{conn: conn} do
       user_query = """
       mutation CreateComment($postId: Int!, $author: String!, $text: String!) {
