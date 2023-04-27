@@ -3,8 +3,6 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
 
   import BlogNineToFiveSylvester.BlogFixtures
 
-  # TODO create tests for faulty posts and comments
-
   describe "posts" do
     test "list all posts", %{conn: conn} do
       user_query = """
@@ -126,6 +124,48 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
                }
              }
     end
+
+    test "create post with invalid data should return error", %{conn: conn} do
+      user_query = """
+      mutation CreatePost($author: String!, $title: String!, $text: String!) {
+        createPost(
+          author: $author,
+          title: $title,
+          text: $text
+        ) {
+          author
+          title
+          text
+        }
+      }
+      """
+
+      invalid_attrs = %{author: "s", title: "s", text: "some text"}
+
+      conn =
+        post(conn, "/api/graphiql", %{
+          "query" => user_query,
+          "variables" => %{
+            author: invalid_attrs.author,
+            title: invalid_attrs.title,
+            text: invalid_attrs.text
+          }
+        })
+
+      assert %{
+               "data" => %{"createPost" => nil},
+               "errors" => [
+                 %{
+                   "locations" => locations,
+                   "message" =>
+                     "author: should be at least 2 character(s). title: should be at least 2 character(s). ",
+                   "path" => ["createPost"]
+                 }
+               ]
+             } = json_response(conn, 200)
+
+      assert is_list(locations)
+    end
   end
 
   describe "comments" do
@@ -167,6 +207,49 @@ defmodule BlogNineToFiveSylvesterWeb.SchemaTest do
                  }
                }
              }
+    end
+
+    test "add comment with invalid data should return error", %{conn: conn} do
+      user_query = """
+      mutation CreateComment($postId: Int!, $author: String!, $text: String!) {
+        addCommentToPost(
+          postId: $postId,
+          author: $author,
+          text: $text
+        ) {
+          postId
+          author
+          text
+        }
+      }
+      """
+
+      post = post_fixture()
+
+      invalid_attrs = %{post_id: post.id, author: "s", text: "some text"}
+
+      conn =
+        post(conn, "/api/graphiql", %{
+          "query" => user_query,
+          "variables" => %{
+            postId: invalid_attrs.post_id,
+            author: invalid_attrs.author,
+            text: invalid_attrs.text
+          }
+        })
+
+      assert %{
+               "data" => %{"addCommentToPost" => nil},
+               "errors" => [
+                 %{
+                   "locations" => locations,
+                   "message" => "author: should be at least 2 character(s). ",
+                   "path" => ["addCommentToPost"]
+                 }
+               ]
+             } = json_response(conn, 200)
+
+      assert is_list(locations)
     end
   end
 end
