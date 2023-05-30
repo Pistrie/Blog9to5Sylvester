@@ -90,11 +90,6 @@ jobs:
 workflows:
   build-deploy:
     jobs:
-      - build:
-          context:
-            - jira
-          post-steps:
-            - jira/notify
       - deploy-production:
           context:
             - org-global
@@ -104,10 +99,6 @@ workflows:
           filters:
             branches:
               only: master
-          post-steps:
-            - jira/notify:
-                environment_type: production
-                job_type: deployment
       - sentry-production:
           context: org-global
           requires:
