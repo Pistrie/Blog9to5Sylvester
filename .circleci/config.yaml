@@ -1,0 +1,117 @@
+version: 2.1
+
+orbs:
+  jira: circleci/jira@1.3.1
+
+commands:
+  deploy-heroku:
+    description: "Deploy to Heroku"
+    parameters:
+      app:
+        type: string
+    steps:
+      - run:
+          name: Deploy master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/<< parameters.app >>.git HEAD:refs/heads/master
+
+  sentry:
+    description: "Notify Sentry of deployment"
+    parameters:
+      environment:
+        type: string
+      project:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Deploy new release
+          command: |
+            sentry-cli releases -p << parameters.project >> new ${CIRCLE_SHA1}
+            sentry-cli releases -p << parameters.project >> set-commits --auto ${CIRCLE_SHA1}
+            sentry-cli releases -p << parameters.project >> finalize ${CIRCLE_SHA1}
+            sentry-cli releases -p << parameters.project >> deploys ${CIRCLE_SHA1} new -e << parameters.environment >>
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: cimg/elixir:1.14.0
+        environment:
+          MIX_ENV: test
+      - image: cimg/postgres:13.6
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: blog_nine_to_five_sylvester_test
+          POSTGRES_PASSWORD: postgres
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "mix.lock" }}
+            - cache-
+      - run: mix do deps.get, compile
+      - save_cache:
+          key: cache-{{ checksum "mix.lock" }}
+          paths:
+            - deps
+            - _build
+      - save_cache:
+          key: cache-
+          paths:
+            - deps
+            - _build
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: mix deps.unlock --check-unused
+      - run: mix format --check-formatted
+      - run: mix coveralls.circle
+      - store_test_results:
+          path: tmp/test-results
+
+  deploy-production:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - deploy-heroku:
+          app: "sylvester-blog"
+
+  sentry-production:
+    docker:
+      - image: getsentry/sentry-cli:latest
+    steps:
+      - checkout
+      - sentry:
+          project: sylvester-blog
+          environment: production
+
+workflows:
+  build-deploy:
+    jobs:
+      - build:
+          context:
+            - jira
+          post-steps:
+            - jira/notify
+      - deploy-production:
+          context:
+            - org-global
+            - jira
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+          post-steps:
+            - jira/notify:
+                environment_type: production
+                job_type: deployment
+      - sentry-production:
+          context: org-global
+          requires:
+            - deploy-production
+          filters:
+            branches:
+              only: master
