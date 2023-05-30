@@ -55,7 +55,7 @@ defmodule BlogNineToFiveSylvester.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:sentry, "~> 8.0"},
+      {:sentry, "~> 8.0"}
     ]
   end
 
