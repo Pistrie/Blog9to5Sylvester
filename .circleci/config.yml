@@ -90,6 +90,7 @@ jobs:
 workflows:
   build-deploy:
     jobs:
+      - build
       - deploy-production:
           context:
             - org-global
