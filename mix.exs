@@ -55,6 +55,7 @@ defmodule BlogNineToFiveSylvester.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"}
+      {:sentry, "~> 8.0"},
     ]
   end
 
@@ -69,7 +70,8 @@ defmodule BlogNineToFiveSylvester.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      sentry_recompile: ["compile", "deps.compile sentry --force"]
     ]
   end
 end
