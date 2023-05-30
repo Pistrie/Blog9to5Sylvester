@@ -1,4 +1,5 @@
 defmodule BlogNineToFiveSylvesterWeb.Endpoint do
+  use Sentry.PlugCapture
   use Phoenix.Endpoint, otp_app: :blog_nine_to_five_sylvester
 
   # The session will be stored in the cookie and signed,
@@ -42,6 +43,7 @@ defmodule BlogNineToFiveSylvesterWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
+  plug Sentry.PlugContext
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
