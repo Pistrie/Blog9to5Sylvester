@@ -27,7 +27,8 @@ config :blog_nine_to_five_sylvester, BlogNineToFiveSylvesterWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :blog_nine_to_five_sylvester, BlogNineToFiveSylvester.Mailer, adapter: Swoosh.Adapters.Local
+config :blog_nine_to_five_sylvester, BlogNineToFiveSylvester.Mailer,
+  adapter: Swoosh.Adapters.Local
 
 # Configures Elixir's Logger
 config :logger, :console,
