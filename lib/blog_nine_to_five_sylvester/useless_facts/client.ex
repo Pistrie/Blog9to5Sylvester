@@ -1,4 +1,4 @@
-defmodule BlogNineToFiveSylvester.Blog.Client do
+defmodule BlogNineToFiveSylvester.UselessFacts.Client do
   use Tesla, only: [:get]
 
   plug Tesla.Middleware.BaseUrl, "https://uselessfacts.jsph.pl/api/v2/"
