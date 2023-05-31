@@ -47,6 +47,7 @@ defmodule BlogNineToFiveSylvester.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:excoveralls, "~> 0.10", only: :test},
       {:hackney, "~> 1.8"},
+      {:oban, "~> 2.14"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_dashboard, "~> 0.7.2"},
       {:swoosh, "~> 1.3"},
