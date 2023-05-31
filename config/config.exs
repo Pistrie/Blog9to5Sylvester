@@ -10,6 +10,12 @@ import Config
 config :blog_nine_to_five_sylvester,
   ecto_repos: [BlogNineToFiveSylvester.Repo]
 
+# configure oban
+config :blog_nine_to_five_sylvester, Oban,
+  repo: BlogNineToFiveSylvester.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]
+
 # Configures the endpoint
 config :blog_nine_to_five_sylvester, BlogNineToFiveSylvesterWeb.Endpoint,
   url: [host: "localhost"],

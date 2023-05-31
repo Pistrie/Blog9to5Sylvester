@@ -14,6 +14,7 @@ defmodule BlogNineToFiveSylvester.Application do
       BlogNineToFiveSylvesterWeb.Telemetry,
       # Start the Ecto repository
       BlogNineToFiveSylvester.Repo,
+      {Oban, Application.fetch_env!(:blog_nine_to_five_sylvester, Oban)},
       # Start the PubSub system
       {Phoenix.PubSub, name: BlogNineToFiveSylvester.PubSub},
       # Start Finch
