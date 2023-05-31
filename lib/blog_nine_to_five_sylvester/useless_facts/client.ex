@@ -16,7 +16,9 @@ defmodule BlogNineToFiveSylvester.UselessFacts.Client do
   end
 
   defp extract_fact_field(http_response) do
-    {:ok, %{body: %{"text" => text}}} = http_response
-    text
+    case http_response do
+      {:ok, %{body: %{"text" => text}}} -> {:ok, text}
+      {:error, reason} -> {:error, reason}
+    end
   end
 end
