@@ -11,7 +11,7 @@ defmodule BlogNineToFiveSylvester.UselessFacts.JobsTest do
     BlogNineToFiveSylvester.UselessFacts.FactFetchingJob.new(%{})
     |> Oban.insert!()
 
-    # assert_enqueued(worker: BlogNineToFiveSylvester.UselessFacts.FactFetchingJob, args: %{})
+    assert_enqueued(worker: BlogNineToFiveSylvester.UselessFacts.FactFetchingJob, args: %{})
   end
 
   test "fact gets retrieved" do
