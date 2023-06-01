@@ -8,17 +8,11 @@ defmodule BlogNineToFiveSylvester.UselessFacts.Client do
     "/facts/random"
     |> fact_in_english()
     |> get()
-    |> extract_fact_field()
+    |> do_get()
   end
 
-  defp fact_in_english(url) do
-    url <> "?language=en"
-  end
+  defp fact_in_english(url), do: url <> "?language=en"
 
-  defp extract_fact_field(http_response) do
-    case http_response do
-      {:ok, %{body: %{"text" => text}}} -> {:ok, text}
-      {:error, reason} -> {:error, reason}
-    end
-  end
+  defp do_get({:ok, %{body: %{"text" => text}}}), do: {:ok, text}
+  defp do_get({:error, reason}), do: {:error, reason}
 end
