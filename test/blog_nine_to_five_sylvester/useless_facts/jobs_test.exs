@@ -7,7 +7,6 @@ defmodule BlogNineToFiveSylvester.UselessFacts.JobsTest do
   end
 
   test "fact fetching gets queued" do
-    # FIXME how to test whether job is queued
     BlogNineToFiveSylvester.UselessFacts.FactFetchingJob.new(%{})
     |> Oban.insert!()
 
