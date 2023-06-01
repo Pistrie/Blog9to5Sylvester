@@ -9,7 +9,7 @@ defmodule BlogNineToFiveSylvesterWeb.Router do
     pipe_through :api
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
-      schema: BlogNineToFiveSylvesterWeb.Schema,
+      schema: BlogNineToFiveSylvesterWeb.GraphQL.Schema,
       interface: :simple,
       context: %{pubsub: BlogNineToFiveSylvesterWeb.Endpoint}
   end
