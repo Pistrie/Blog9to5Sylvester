@@ -4,15 +4,10 @@ defmodule Graphql.Mutations.CreateCommentTest do
   import BlogNineToFiveSylvester.BlogFixtures
 
   @query """
-  mutation CreateComment($postId: Int!, $author: String!, $text: String!) {
-    addCommentToPost(
-      postId: $postId,
-      author: $author,
-      text: $text
-    ) {
-      postId
+  mutation addCommentToPost($input: CreateCommentInput!) {
+    addCommentToPost(createComment: $input) {
       author
-      text
+      postId
     }
   }
   """
@@ -26,20 +21,47 @@ defmodule Graphql.Mutations.CreateCommentTest do
       post(conn, "/api/graphiql", %{
         "query" => @query,
         "variables" => %{
-          postId: valid_attrs.post_id,
-          author: valid_attrs.author,
-          text: valid_attrs.text
+          input: %{
+            post_id: valid_attrs.post_id,
+            author: valid_attrs.author,
+            text: valid_attrs.text
+          }
         }
       })
 
     assert json_response(conn, 200) == %{
              "data" => %{
                "addCommentToPost" => %{
-                 "author" => valid_attrs.author,
-                 "postId" => valid_attrs.post_id,
-                 "text" => valid_attrs.text
+                 "postId" => valid_attrs.post_id |> Integer.to_string(),
+                 "author" => valid_attrs.author
                }
              }
+           }
+  end
+
+  test "unable to add comment with invalid data", %{conn: conn} do
+    post = post_fixture()
+
+    invalid_attrs = %{post_id: post.id, author: "a", text: "some text"}
+
+    conn =
+      conn
+      |> post("/api/graphiql", %{
+        "query" => @query,
+        "variables" => %{
+          input: invalid_attrs
+        }
+      })
+
+    assert json_response(conn, 200) == %{
+             "data" => %{"addCommentToPost" => nil},
+             "errors" => [
+               %{
+                 "locations" => [%{"column" => 3, "line" => 2}],
+                 "message" => "author: should be at least 2 character(s).",
+                 "path" => ["addCommentToPost"]
+               }
+             ]
            }
   end
 end

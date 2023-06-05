@@ -2,6 +2,8 @@ defmodule BlogNineToFiveSylvester.Graphql.Resolvers.Posts do
   alias BlogNineToFiveSylvester.Repo
   alias BlogNineToFiveSylvester.Blog.Post
 
+  import Ecto.Query
+
   defp format_changeset_errors(%Ecto.Changeset{} = changeset) do
     changeset
     |> Ecto.Changeset.traverse_errors(fn {msg, opts} ->
@@ -16,10 +18,17 @@ defmodule BlogNineToFiveSylvester.Graphql.Resolvers.Posts do
     |> String.trim()
   end
 
-  def list(_root, _args, _info), do: {:ok, Repo.all(Post)}
+  def list(_root, _args, _info) do
+    Post
+    |> order_by(asc: :title)
+    |> Repo.all()
+    |> (&{:ok, &1}).()
+  end
 
   def get(_root, args, _info) do
-    {:ok, Repo.get!(Post, args.id)}
+    Post
+    |> Repo.get(args.id)
+    |> (&{:ok, &1}).()
   end
 
   def create(_root, %{create_post: params}, _info) do

@@ -16,9 +16,9 @@ defmodule BlogNineToFiveSylvester.Graphql.Resolvers.Comments do
     |> String.trim()
   end
 
-  def add_to_post(_root, args, _info) do
+  def add_to_post(_root, %{create_comment: params}, _info) do
     %Comment{}
-    |> Comment.changeset(args)
+    |> Comment.changeset(params)
     |> Repo.insert()
     |> do_response()
   end
