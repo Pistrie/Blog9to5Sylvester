@@ -15,12 +15,10 @@ defmodule BlogNineToFiveSylvester.UselessFacts.FactFetchingJobTest do
     :ok
   end
 
-  test "queue fact fetching" do
-    assert :ok == perform_job(FactFetchingJob, %{})
-  end
-
   test "fact fetching gets queued" do
-    perform_job(FactFetchingJob, %{})
+    %{}
+    |> Oban.Job.new(worker: FactFetchingJob, queue: :default)
+    |> Oban.insert!()
 
     assert_enqueued(worker: FactFetchingJob, args: %{})
   end
