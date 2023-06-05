@@ -12,7 +12,6 @@ defmodule BlogNineToFiveSylvester.Blog.Comment do
     timestamps()
   end
 
-  @doc false
   def changeset(comment, attrs) do
     comment
     |> cast(attrs, [:text, :author, :post_id])
