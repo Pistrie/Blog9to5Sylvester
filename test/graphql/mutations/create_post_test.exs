@@ -56,7 +56,7 @@ defmodule Graphql.Mutations.CreatePostTest do
              "data" => %{"createPost" => nil},
              "errors" => [
                %{
-                 "locations" => locations,
+                 "locations" => _locations,
                  "message" =>
                    "author: should be at least 2 character(s). title: should be at least 2 character(s).",
                  "path" => ["createPost"]
